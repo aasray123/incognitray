@@ -1,3 +1,8 @@
+// To run
+// gcc /home/aasray/Documents/incognitray/listener.c -o
+// /home/aasray/Documents/incognitray/listener -lcurl sudo nmcli connection up
+// "GNXS-5G-376260"
+
 #include <arpa/inet.h>
 #include <curl/curl.h>
 #include <netdb.h>
@@ -117,6 +122,12 @@ int main(int argc, char *argv[]) {
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &doh_response);
 
+            // Hardcode the IP for cloudflare-dns.com so libcurl skips the DNS
+            // lookup
+            struct curl_slist *resolve_hosts = NULL;
+            resolve_hosts = curl_slist_append(resolve_hosts,
+                                              "cloudflare-dns.com:443:1.1.1.1");
+            curl_easy_setopt(curl, CURLOPT_RESOLVE, resolve_hosts);
             // Execute the request
             CURLcode res = curl_easy_perform(curl);
 
@@ -130,9 +141,10 @@ int main(int argc, char *argv[]) {
             } else {
                 fprintf(stderr, "cURL error: %s\n", curl_easy_strerror(res));
             }
-
+			printf("\n");
             // Clean up the session
             curl_slist_free_all(headers);
+			curl_slist_free_all(resolve_hosts);
             curl_easy_cleanup(curl);
         }
     }
