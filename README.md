@@ -4,6 +4,8 @@ Requires nmcli
 
 
 # Running
-Run `make`
-Run `./proxy-toggle.sh`
-Run `sudo ./listener`
+```
+make
+./proxy-toggle.sh
+sudo ./listener
+```
