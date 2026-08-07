@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_DGRAM;
 
-    if ((status = getaddrinfo("127.0.0.1", "53", &hints, &res)) != 0) {
+    if ((status = getaddrinfo("0.0.0.0", "53", &hints, &res)) != 0) {
         return 2;
     }
 
